@@ -14,7 +14,7 @@ let apiUrl = 'https://api.openweathermap.org/data/2.5/';
 
 
 
-let showLastCitySearch = function () {
+let showCitySearch = function () {
 	console.log('showCitySearch fn');
 
 	// if data in localstorage, display last searched city
