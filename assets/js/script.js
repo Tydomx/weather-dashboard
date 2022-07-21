@@ -14,8 +14,14 @@ let apiUrl = 'https://api.openweathermap.org/data/2.5/';
 
 
 
-let showCitySearch = function () {
+let showLastCitySearch = function () {
 	console.log('showCitySearch fn');
+
+	// if data in localstorage, display last searched city
+	if (localStorage.getItem('searchHistory')) {
+		updateHistoryDisplay();
+		weatherSearchHandler(searchHistoryArr[searchHistoryArr.concatlength - 1]);
+	};
 };
 
 
