@@ -344,3 +344,17 @@ showCitySearch();
 
 // event listener for click on search button
 searchCityForm.addEventListener('click', searchFormHandler);
+
+// if user clicks on city from search history list
+searchHistoryList.addEventListener('click', function (event) {
+	// prevent the browser from sending the form's input data to a URL
+	event.preventDefault();
+
+	let clickedSearch = event.target;
+
+	if (clickedSearch.matches('li')) {
+		let clickedHistoryCity = clickedSearch.getAttribute('data-history-value');
+		weatherSearchHandler(clickedHistoryCity);
+		addCityToSearch(clickedHistoryCity);
+	};
+});

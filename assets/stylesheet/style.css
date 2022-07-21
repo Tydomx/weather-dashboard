@@ -14,6 +14,16 @@
 	background-color: purple;
 }
 
+li:hover {
+	background-color: #949494;
+	cursor: pointer;
+}
+
+li:active {
+	background-color: #074dff;
+	cursor: inherit;
+}
+
 /* not displaying search history on small screen */
 @media only screen and (max-width: 767px) {
 	#search-history-box {
