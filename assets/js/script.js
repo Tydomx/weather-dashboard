@@ -5,6 +5,9 @@ let currentWeatherBox = document.querySelector('#current-weather-box');
 let forecastSection = document.querySelector('#forecast-section');
 let weatherBody = document.querySelector('#weather-body');
 let fiveDay = document.querySelector('#five-day');
+let searchHistoryList = document.querySelector('#search-history');
+
+let searchHistoryArr = [];
 
 let apiKey = '425d9b6035ae956db1531e2fea0981f6';
 let apiUrl = 'https://api.openweathermap.org/data/2.5/';
@@ -17,7 +20,6 @@ let showCitySearch = function () {
 
 
 let fetchAndDisplayUVi = function (cityLatLon) {
-	console.log('fetchAndDisplayUvi fn Lat/Lon: ' + cityLatLon);
 
 	let searchLatLon = 'lat=' + cityLatLon.lat + '&lon=' + cityLatLon.lon;
 	let uviUrl = apiUrl + 'onecall?' + searchLatLon + '&appid=' + apiKey;
@@ -46,7 +48,6 @@ let fetchAndDisplayUVi = function (cityLatLon) {
 
 
 let displayCurrentWeather = function (fetchedData) {
-	console.log('displayCurrentWeather fn');
 
 	// create <h1> tag to display city name, date, and weather icon
 	let currentWeatherHeader = document.createElement('h1');
@@ -54,8 +55,6 @@ let displayCurrentWeather = function (fetchedData) {
 	// extra today's date
 	let currentTime = moment();
 	let today = '(' + currentTime.format('MM/DD/YYYY') + ')';
-	console.log('today: ' + today);
-	console.log('fetchedData.name' + fetchedData.name);
 
 	// assign <h1> textContent to city name and today's date
 	currentWeatherHeader.textContent = fetchedData.name + ' ' + today;
@@ -64,24 +63,18 @@ let displayCurrentWeather = function (fetchedData) {
 	let weatherIcon = document.createElement('img');
 	weatherIcon.setAttribute('src', 'https://openweathermap.org/img/w/' + fetchedData.weather[0].icon + '.png');
 	weatherIcon.setAttribute('alt', fetchedData.weather[0].main + ' - ' + fetchedData.weather[0].description);
-	console.log('ICON');
-	console.log('src', 'https://openweathermap.org/img/w/' + fetchedData.weather[0].icon + '.png');
-	console.log('alt', fetchedData.weather[0].main + ' - ' + fetchedData.weather[0].description);
 
 	// create <div> element to display temperature
 	let currentTemp = document.createElement('div');
 	currentTemp.textContent = 'Temperature: ' + (fetchedData.main.temp) + ' °F';
-	console.log('Temperature: ' + (fetchedData.main.temp) + ' °F');
 
 	// create <div> element to display humidity
 	let currentHumidity = document.createElement('div');
 	currentHumidity.textContent = 'Humidity: ' + (fetchedData.main.humidity) + '%';
-	console.log('Humidity: ' + (fetchedData.main.humidity) + '%');
 
 	// create <div> element to display wind speed
 	let currentWindSpeed = document.createElement('div');
 	currentWindSpeed.textContent = 'Wind Speed: ' + (fetchedData.wind.speed) + 'MPH';
-	console.log('Wind Speed: ' + (fetchedData.wind.speed) + 'MPH');
 
 	// append icon to header
 	currentWeatherHeader.appendChild(weatherIcon);
@@ -104,10 +97,8 @@ let displayCurrentWeather = function (fetchedData) {
 
 
 let fetchCurrentWeather = function (searchCity) {
-	console.log('searchCurrentWeather fn: ' + searchCity);
 
 	let currentWeatherUrl = apiUrl + 'weather?q=' + searchCity + '&units=imperial&APPID=' + apiKey;
-	console.log(currentWeatherUrl);
 
 	fetch(currentWeatherUrl).then(function (response) {
 		if (response.ok) {
@@ -128,7 +119,6 @@ let fetchCurrentWeather = function (searchCity) {
 
 
 let displayForecastWeather = function (fetchedForecastData) {
-	console.log('displayForecastWeather fn, forecast count: ' + fetchedForecastData.cnt);
 
 	// loop thru number of forecast days to display all 5 forecasts one by one
 	for (let i = 0; i < fetchedForecastData.cnt; i++) {
@@ -136,7 +126,6 @@ let displayForecastWeather = function (fetchedForecastData) {
 		// create display elements
 		let forecastDate = moment(fetchedForecastData.list[i].dt_txt);
 		if (parseInt(forecastDate.format('HH')) == 12) {
-			console.log('Hour: ' + forecastDate.format('HH'));
 
 			// create <div> to hold each forecast
 			let singleForecastBox = document.createElement('div');
@@ -151,24 +140,19 @@ let displayForecastWeather = function (fetchedForecastData) {
 			forecastHeader.classList.add("card-title");
 			forecastDate = forecastDate.format("MM/DD/YYYY");
 			forecastHeader.textContent = forecastDate
-			console.log("Forecast iteration #" + (i + 1) + ": " + forecastDate);
 
 			// grab weather icon
 			let forecastIcon = document.createElement('img');
 			forecastIcon.setAttribute('src', 'https://openweathermap.org/img/w/' + fetchedForecastData.list[i].weather[0].icon + '.png');
 			forecastIcon.setAttribute('alt', fetchedForecastData.list[i].weather[0].main + ' - ' + fetchedForecastData.list[i].weather[0].description);
-			console.log('src', 'https://openweathermap.org/img/w/' + fetchedForecastData.list[i].weather[0].icon + '.png');
-			console.log('alt', fetchedForecastData.list[i].weather[0].main + ' - ' + fetchedForecastData.list[i].weather[0].description);
 
 			// display temperature
 			let forecastTemp = document.createElement('div');
 			forecastTemp.textContent = 'Temp: ' + fetchedForecastData.list[i].main.temp + ' °F';
-			console.log('Temp: ' + fetchedForecastData.list[i].main.temp + ' °F');
 
 			// display humidity
 			let forecastHumidity = document.createElement('div');
 			forecastHumidity.textContent = 'Humidity: ' + fetchedForecastData.list[i].main.humidity + '%';
-			console.log('Humidity: ' + fetchedForecastData.list[i].main.humidity + '%');
 
 			// append all elements to forecast box body
 			singleForecastBody.appendChild(forecastHeader);
@@ -189,7 +173,7 @@ let displayForecastWeather = function (fetchedForecastData) {
 
 
 let fetchDisplayFiveDay = function (searchCity) {
-	console.log('fetchDisplayFiveDay fn: ' + searchCity);
+
 	let forecastUrl = apiUrl + 'forecast?q=' + searchCity + '&units=imperial&appid=' + apiKey;
 
 
@@ -212,7 +196,6 @@ let fetchDisplayFiveDay = function (searchCity) {
 
 
 let weatherSearchHandler = function (searchCity) {
-	console.log('weatherSearchHandler fn: ' + searchCity);
 
 	// hide no data message
 	noDataMessage.classList.add('hide');
@@ -236,8 +219,51 @@ let weatherSearchHandler = function (searchCity) {
 };
 
 
+let updateHistoryDisplay = function () {
+	console.log('updateHistoryDisplay fn ');
+
+	// clear search history display
+	searchHistoryList.textContent = '';
+
+	searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory'));
+
+	// display list of past cities searched in descending order from latest to oldest
+	let displayCount = 1;
+	for (let i = searchHistoryArr.length - 1; i >= 0; i--) {
+		let historySearchItem = document.createElement('li');
+
+		historySearchItem.textContent = displayCount + '.) ' + searchHistoryArr[i];
+		historySearchItem.classList.add('list-group-item');
+		historySearchItem.setAttribute('data-history-value', searchHistoryArr[i]);
+
+		searchHistoryList.appendChild(historySearchItem);
+
+		displayCount++;
+	};
+};
+
 let addCityToSearch = function (searchCity) {
-	console.log('addCityToSearch fn: ' + searchCity);
+
+	// if city search list available in localStorage, grab it
+	if (localStorage.getItem('searchHistory')) {
+		searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory'));
+	};
+
+	// add recently search city to searchHistoryArr array
+	searchHistoryArr.push(searchCity);
+
+	console.log('searchHistoryArr: ' + searchHistoryArr);
+
+	// store up to 10 cities in the array, shift / remove oldest city
+	if (searchHistoryArr.length > 10) {
+		searchHistoryArr.shift();
+	};
+
+	// store updated SearchHistoryArr into localStorage
+	localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArr));
+
+	// refresh list of search history on web page
+	updateHistoryDisplay();
 };
 
 
