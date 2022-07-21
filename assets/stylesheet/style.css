@@ -14,6 +14,18 @@
 	background-color: purple;
 }
 
+.search-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#search-history {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 li:hover {
 	background-color: #949494;
 	cursor: pointer;
