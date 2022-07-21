@@ -13,11 +13,39 @@ let showCitySearch = function () {
 	console.log('showCitySearch fn');
 };
 
-let searchCurrentWeather = function (searchCity) {
+let displayCurrentWeather = function (data) {
+	console.log('displayCurrentWeather fn: ');
+};
+
+let displayUVData = function (cityLatLon) {
+	console.log('displayUVData fn Lat/Lon: ' + cityLatLon);
+};
+
+let fetchCurrentWeather = function (searchCity) {
 	console.log('searchCurrentWeather fn: ' + searchCity);
 
 	let currentWeatherUrl = apiUrl + 'weather?q=' + searchCity + '&units=imperial&PPID=' + apiKey;
 	console.log(currentWeatherUrl);
+
+	fetch(currentWeatherUrl).then(function (response) {
+		if (response.ok) {
+			response.json().then(function (data) {
+				console.log('');
+				console.log('fetched Data: ');
+				console.log(data);
+
+				// display currently fetched weather
+				displayCurrentWeather(data);
+
+				// display currently fetched UV data
+				let cityLatLon = data.coord;
+				displayUVData(cityLatLon);
+			});
+		}
+		else {
+			console.log('Fetch Error');
+		};
+	});
 };
 
 let weatherSearchHandler = function (searchCity) {
@@ -39,7 +67,7 @@ let weatherSearchHandler = function (searchCity) {
 	fiveDay.textContent = '';
 
 	// call search function for fetch data
-	searchCurrentWeather(searchCity);
+	fetchCurrentWeather(searchCity);
 };
 
 let addCityToSearch = function (searchCity) {
