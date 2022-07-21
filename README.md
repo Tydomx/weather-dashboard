@@ -20,6 +20,7 @@ The application is a weather dashboard to provide travelers a weather dashboard 
 Also provided is a 5-day forecast and a search history listing of the last ten searched cities. The user may click on any city on the history list to receieve that cities forecast again.
 
 ## Screenshot
+![image](https://user-images.githubusercontent.com/99767019/180330527-1b54c41e-d875-40a9-a627-8f173db1bb5f.png)
 
 
 ## Deployed
