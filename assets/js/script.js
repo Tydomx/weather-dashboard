@@ -112,7 +112,8 @@ let fetchCurrentWeather = function (searchCity) {
 			});
 		}
 		else {
-			console.log('Fetch weather data Error');
+			document.querySelector('#current-weather-box').classList.remove('hide');
+			document.querySelector('#no-data-message').classList.remove('hide');
 		};
 	});
 };
@@ -220,11 +221,11 @@ let weatherSearchHandler = function (searchCity) {
 
 
 let updateHistoryDisplay = function () {
-	console.log('updateHistoryDisplay fn ');
 
 	// clear search history display
 	searchHistoryList.textContent = '';
 
+	// grab and parse searchHistoryArr from localStorage
 	searchHistoryArr = JSON.parse(localStorage.getItem('searchHistory'));
 
 	// display list of past cities searched in descending order from latest to oldest
@@ -252,6 +253,7 @@ let addCityToSearch = function (searchCity) {
 	// add recently search city to searchHistoryArr array
 	searchHistoryArr.push(searchCity);
 
+	console.log('');
 	console.log('searchHistoryArr: ' + searchHistoryArr);
 
 	// store up to 10 cities in the array, shift / remove oldest city
@@ -278,7 +280,6 @@ let searchFormHandler = function (event) {
 		return false;
 	}
 
-	console.log('searchCity: ' + searchCity);
 
 	// if input, fetch weather data
 	weatherSearchHandler(searchCity);
