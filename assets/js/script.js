@@ -9,9 +9,12 @@ let fiveDay = document.querySelector('#five-day');
 let apiKey = '425d9b6035ae956db1531e2fea0981f6';
 let apiUrl = 'https://api.openweathermap.org/data/2.5/';
 
+
+
 let showCitySearch = function () {
 	console.log('showCitySearch fn');
 };
+
 
 let fetchAndDisplayUVi = function (cityLatLon) {
 	console.log('fetchAndDisplayUvi fn Lat/Lon: ' + cityLatLon);
@@ -40,6 +43,7 @@ let fetchAndDisplayUVi = function (cityLatLon) {
 		};
 	});
 };
+
 
 let displayCurrentWeather = function (fetchedData) {
 	console.log('displayCurrentWeather fn');
@@ -98,6 +102,7 @@ let displayCurrentWeather = function (fetchedData) {
 	fetchAndDisplayUVi(cityLatLon);
 };
 
+
 let fetchCurrentWeather = function (searchCity) {
 	console.log('searchCurrentWeather fn: ' + searchCity);
 
@@ -121,6 +126,91 @@ let fetchCurrentWeather = function (searchCity) {
 	});
 };
 
+
+let displayForecastWeather = function (fetchedForecastData) {
+	console.log('displayForecastWeather fn, forecast count: ' + fetchedForecastData.cnt);
+
+	// loop thru number of forecast days to display all 5 forecasts one by one
+	for (let i = 0; i < fetchedForecastData.cnt; i++) {
+
+		// create display elements
+		let forecastDate = moment(fetchedForecastData.list[i].dt_txt);
+		if (parseInt(forecastDate.format('HH')) == 12) {
+			console.log('Hour: ' + forecastDate.format('HH'));
+
+			// create <div> to hold each forecast
+			let singleForecastBox = document.createElement('div');
+			singleForecastBox.classList.add('card', 'bg-primary', 'col-10', 'col-lg-12', 'p-0', 'mx-auto', 'mt-3');
+
+			// create <div> body to hold each forecast
+			let singleForecastBody = document.createElement('div');
+			singleForecastBody.classList.add('card-body', 'text-light', 'p-2');
+
+			// forecast header is the forecast date
+			let forecastHeader = document.createElement("h5");
+			forecastHeader.classList.add("card-title");
+			forecastDate = forecastDate.format("MM/DD/YYYY");
+			forecastHeader.textContent = forecastDate
+			console.log("Forecast iteration #" + (i + 1) + ": " + forecastDate);
+
+			// grab weather icon
+			let forecastIcon = document.createElement('img');
+			forecastIcon.setAttribute('src', 'https://openweathermap.org/img/w/' + fetchedForecastData.list[i].weather[0].icon + '.png');
+			forecastIcon.setAttribute('alt', fetchedForecastData.list[i].weather[0].main + ' - ' + fetchedForecastData.list[i].weather[0].description);
+			console.log('src', 'https://openweathermap.org/img/w/' + fetchedForecastData.list[i].weather[0].icon + '.png');
+			console.log('alt', fetchedForecastData.list[i].weather[0].main + ' - ' + fetchedForecastData.list[i].weather[0].description);
+
+			// display temperature
+			let forecastTemp = document.createElement('div');
+			forecastTemp.textContent = 'Temp: ' + fetchedForecastData.list[i].main.temp + ' °F';
+			console.log('Temp: ' + fetchedForecastData.list[i].main.temp + ' °F');
+
+			// display humidity
+			let forecastHumidity = document.createElement('div');
+			forecastHumidity.textContent = 'Humidity: ' + fetchedForecastData.list[i].main.humidity + '%';
+			console.log('Humidity: ' + fetchedForecastData.list[i].main.humidity + '%');
+
+			// append all elements to forecast box body
+			singleForecastBody.appendChild(forecastHeader);
+			singleForecastBody.appendChild(forecastIcon);
+			singleForecastBody.appendChild(forecastTemp);
+			singleForecastBody.appendChild(forecastHumidity);
+
+			// append forecast box body to forecast box
+			singleForecastBox.appendChild(singleForecastBody);
+
+			// append each day's forecast box to 5-day forecast
+			fiveDay.appendChild(singleForecastBox);
+		};
+	};
+
+	forecastSection.classList.remove('hide');
+};
+
+
+let fetchDisplayFiveDay = function (searchCity) {
+	console.log('fetchDisplayFiveDay fn: ' + searchCity);
+	let forecastUrl = apiUrl + 'forecast?q=' + searchCity + '&units=imperial&appid=' + apiKey;
+
+
+	fetch(forecastUrl).then(function (response) {
+		if (response.ok) {
+			response.json().then(function (fetchedForecastData) {
+				console.log('');
+				console.log('fetched forecast data: ');
+				console.log(fetchedForecastData);
+
+				// call function to display 5-day forecast data
+				displayForecastWeather(fetchedForecastData);
+			});
+		}
+		else {
+			console.log('Fetch forecast weather data error');
+		};
+	});
+};
+
+
 let weatherSearchHandler = function (searchCity) {
 	console.log('weatherSearchHandler fn: ' + searchCity);
 
@@ -141,11 +231,15 @@ let weatherSearchHandler = function (searchCity) {
 
 	// call search function for fetch data
 	fetchCurrentWeather(searchCity);
+	// call search function to fetch and display 5 day
+	fetchDisplayFiveDay(searchCity);
 };
+
 
 let addCityToSearch = function (searchCity) {
 	console.log('addCityToSearch fn: ' + searchCity);
 };
+
 
 let searchFormHandler = function (event) {
 	// stops browser from sending the form's input data to URL
@@ -169,6 +263,9 @@ let searchFormHandler = function (event) {
 	// add last searched city to history search array
 	addCityToSearch(searchCity);
 };
+
+
+
 
 // call function. display weather data for last searched city
 showCitySearch();
