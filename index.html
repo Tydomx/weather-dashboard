@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<script src="https://kit.fontawesome.com/94f1fcf590.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="./assets/stylesheet/style.css">
+	<title>Weather Dashboard</title>
+</head>
+
+<body>
+	<main>
+		<nav class="navbar navbar-dark bg-primary text-center">
+			<h1 class="text-light m-auto">Weather Dashboard</h1>
+		</nav>
+
+		<div class="container">
+			<div class="row">
+				<!-- left column for search box and search history -->
+				<div class="col-12 col-md-4 col-lg-4 col-xl-3 pt-3 bg-secondary" id="search-bar">
+					<!-- search box -->
+					<form class="form-inline mb-3" id="search-city">
+						<h4 class="mr-3">Search for a City:</h4>
+						<input type="text" class="form-control" id="search-input" />
+						<button class="btn btn-primary form-control" type="submit">
+							<i class="fas fa-search"></i>
+						</button>
+					</form>
+					<!-- end of search box -->
+
+					<!-- search history -->
+					<div class="card hide" id="history-card">
+						<h5>Search History</h5>
+						<ul class="list-group list-group-flush" id="search-history">
+
+						</ul>
+					</div>
+					<!-- end of search history -->
+				</div>
+				<!-- end of left column -->
+
+				<!-- right column -->
+				<div class="col-12 col-md-8 col-lg-8 col-xl-9">
+					<!-- daily forecast -->
+					<div class="row pt-md-3 pr-md-3 pl-md-3">
+						<div class="card hide col-12" id="current-weather">
+							<h3 class="hide" id="error-message">Sorry, we don't have data for this city.</h3>
+							<div class="card-body" id="weather-body">
+
+							</div>
+						</div>
+					</div>
+					<!-- end of daily forecast -->
+
+					<!-- 5-day forecast -->
+					<div class="row hide pt-3 p-md-3" id="forecast-section">
+						<div class="col-12">
+							<h3>5-Day Forecast</h3>
+						</div>
+
+						<div class="col-12">
+							<div class="row d-flex justify-content-lg-between" id="five-day">
+
+							</div>
+						</div>
+					</div>
+					<!-- end 5-day forecast -->
+				</div>
+				<!-- end of right column -->
+			</div>
+		</div>
+	</main>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://rawgit.com/moment/moment/2.29.4/min/moment.min.js"></script>
+	<script src="./assets/js/script.js"></script>
+</body>
+
+</html>
